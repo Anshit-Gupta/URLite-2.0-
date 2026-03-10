@@ -3,11 +3,11 @@ export default function Login(){
         <div className=" mt-6 max-w-xl mx-auto  items-center  flex flex-col  font-[family-name:var(--font-gloria)]">
             <div className="border-2 rounded-3xl m-6 p-4">
                 <div className=" flex flex-col m-2 ">
-                    <div className=" flex justify-between gap-12 p-5 ">
-                         <h1 className="text-3xl">Login to your account</h1>
+                    <div className=" flex  p-5 ">
+                         <h1 className=" text-2xl md:text-3xl">Login to your account</h1>
                   
                     </div>
-                  <h3 className="pl-4 text-gray-600">enter your email below to login  </h3>
+                  <h3 className="pl-4  text-gray-600">enter your email below to login  </h3>
                   <h3 className="pl-4 text-gray-600">to your account</h3>
                 </div>
                 <form >
