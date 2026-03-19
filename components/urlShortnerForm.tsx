@@ -1,13 +1,17 @@
 "use client"
 import { useState } from "react";
-
+import { useSession } from "next-auth/react";
+import toast from "react-hot-toast";
 
 export function UrlShortnerForm() {
+    const {data : session  } = useSession();
+    const displayName =
+        session?.user?.name || session?.user?.email?.split("@")[0] || "Friend";
     const [url, setUrl] = useState("");
     const [shortUrl, setShortUrl] = useState("");
     const [copied,setCopied] = useState(false);
-    const [error , setError] = useState("");
-    const  handleSubmit=async(e)=>{
+    
+    const  handleSubmit=async(e : React.FormEvent<HTMLFormElement>)=>{
         e.preventDefault();
         try {
             const response = await fetch('/api/shorturl' , {
@@ -17,8 +21,8 @@ export function UrlShortnerForm() {
             });
             const data = await response.json();
             setShortUrl(`http://localhost:3000/${data.shortId}`);
-        } catch (error) {
-            setError(error.message);
+        } catch {
+            toast.error("enter a valid url");
         }
 
     }
@@ -34,10 +38,15 @@ export function UrlShortnerForm() {
             <div >
                   <div className=" flex flex-col  justify-center">
                           <h1 className="text-3xl md:text-5xl p-2">Shorten your URLs</h1>
-                          <h3 className="text-sm md:text-xl text-gray-600 m-2 ">Sign up to track your URLs and view analytics</h3>
+                                                    {session?.user ? (
+                                                        <h3 className="pl-2 text-sm md:text-xl text-gray-600 mt-4"> <span className="block">Welcome back, {displayName} !!!</span> <span className="block">Shorten a link and track clicks in Analytics</span> </h3>
+                                                    ) : (
+                                                        <h3 className="text-sm md:text-xl text-gray-600 m-2">Sign up to track your URLs and view analytics</h3>
+                                                    )}
+                          
                   </div>
-                    <form action="" onSubmit={handleSubmit}>
-                       <div className="mt-14">
+                    <form  onSubmit={handleSubmit}>
+                       <div className="mt-12">
                      
                      
                 
@@ -63,12 +72,7 @@ export function UrlShortnerForm() {
                                </div>
                        </div>
                 )}
-             {error && (
-            <div className="">
-                {error} hishihsihsih
-                </div>
-              )}
-            </div>
+             </div>
             
         </div>
     )
