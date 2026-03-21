@@ -2,8 +2,12 @@ import {prisma} from "@/lib/prisma"
 
 import { notFound, redirect } from "next/navigation"
 
+type ShortIdPageProps = {
+   params:Promise<{ shortId: string }>;
+   
+}
 
-export default async function Page({ params }){
+export default async function Page({ params }: ShortIdPageProps) {
     const {shortId} = await params;
        const  urlRecord= await prisma.url.findUnique({  //urlreacod ->url
          where :{

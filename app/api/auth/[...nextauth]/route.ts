@@ -1,4 +1,5 @@
 import NextAuth from "next-auth";
+import type { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import  CredentialsProvider  from "next-auth/providers/credentials";
 import {compare} from 'bcryptjs'
@@ -8,7 +9,7 @@ import {prisma} from "@/lib/prisma"
 
 //[...nextauth] is a catch-all dynamic route in Next.js. 
 
-const authOptions = {
+export const authOptions: NextAuthOptions = {
     adapter:PrismaAdapter(prisma),
     providers : [
         GoogleProvider({

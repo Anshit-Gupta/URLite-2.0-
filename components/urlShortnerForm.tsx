@@ -3,6 +3,8 @@ import { useState } from "react";
 import { useSession } from "next-auth/react";
 import toast from "react-hot-toast";
 
+
+
 export function UrlShortnerForm() {
     const {data : session  } = useSession();
     const displayName =
@@ -20,7 +22,16 @@ export function UrlShortnerForm() {
                 body:JSON.stringify({url})
             });
             const data = await response.json();
-            setShortUrl(`http://localhost:3000/${data.shortId}`);
+
+            if(!response.ok){
+                const message = 
+                    typeof data?.error === "string" ? data.error : "Failed to shorten URL";
+                    toast.error(message);
+                    return;
+            }
+
+            const origin = window.location.origin; // automatically macthes where your app is running 
+            setShortUrl(`${origin}/${data.shortId}`);
         } catch {
             toast.error("enter a valid url");
         }
@@ -39,7 +50,7 @@ export function UrlShortnerForm() {
                   <div className=" flex flex-col  justify-center">
                           <h1 className="text-3xl md:text-5xl p-2">Shorten your URLs</h1>
                                                     {session?.user ? (
-                                                        <h3 className="pl-2 text-sm md:text-xl text-gray-600 mt-4"> <span className="block">Welcome back, {displayName} !!!</span> <span className="block">Shorten a link and track clicks in Analytics</span> </h3>
+                                                        <h3 className="pl-4 text-sm md:text-xl text-gray-600 mt-4"> <span className="block">Welcome back, {displayName} !!!</span> <span className="block">Shorten a link and track clicks in Analytics</span> </h3>
                                                     ) : (
                                                         <h3 className="text-sm md:text-xl text-gray-600 m-2">Sign up to track your URLs and view analytics</h3>
                                                     )}
